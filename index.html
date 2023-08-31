@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YTDL</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
     <style>
         .container {
             width: auto;
@@ -41,6 +45,13 @@
                 let oThis = $(this);
                 oThis.attr('disabled', true);
 
+                // Mengubah format URL jika mengandung "youtu.be"
+                if (url.includes("youtu.be")) {
+                    var videoCode = url.split("/").pop();
+                    url = "https://www.youtube.com/watch?v=" + videoCode;
+                    $("#txt_url").val(url);
+                }
+
                 $.get('https://yt-dlp-api.peterli.website/video/?video_url=' + url, function (data) {
                     console.log(data);
 
@@ -69,7 +80,7 @@
                         tbodyVideoLists += '<th scope="row">' + dataIndex + '</th>';
                         tbodyVideoLists += '<td>' + links[index]['format'] + '</td>';
                         tbodyVideoLists += '<td>' + links[index]['itag'] + '</td>';
-                        tbodyVideoLists += '<td><a class="btn btn-success" type="button" href="' + downloadLink  + '">Download</a></td>';
+                        tbodyVideoLists += '<td><a class="btn btn-success" type="button" href="' + downloadLink + '">Download</a></td>';
                         tbodyVideoLists += '</tr>';
                         dataIndex += 1;
                     }
@@ -77,49 +88,52 @@
                     $('#video-lists').html(tbodyVideoLists);
                 });
             });
-
         });
     </script>
+
 </head>
+
 <body>
     <main role="main" class="flex-shrink-0">
         <div class="container">
-          <h1 class="mt-5">YouTube Downloader</h1>
-          <div class="row justify-content-left">
-            <div class="col-12 col-md-12 col-lg-12">
-                <form class="card card-sm">
-                    <div class="card-body row no-gutters align-items-center">
-                        <div class="col-auto">
-                            <i class="fas fa-search h4 text-body"></i>
+            <h1 class="mt-5">YouTube Downloader</h1>
+            <div class="row justify-content-left">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <form class="card card-sm">
+                        <div class="card-body row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <i class="fas fa-search h4 text-body"></i>
+                            </div>
+                            <!--end of col-->
+                            <div class="col">
+                                <input id="txt_url" class="form-control form-control-lg" type="text"
+                                    placeholder="Paste link here">
+                            </div>
+                            <!--end of col-->
+                            <div class="col-auto">
+                                <button id="btn_fetch" class="btn btn-lg btn-success" type="button">Search</button>
+                            </div>
+                            <!--end of col-->
                         </div>
-                        <!--end of col-->
-                        <div class="col">
-                            <input id="txt_url" class="form-control form-control-lg" type="text" placeholder="Paste link here">
-                        </div>
-                        <!--end of col-->
-                        <div class="col-auto">
-                            <button id="btn_fetch" class="btn btn-lg btn-success" type="button">Search</button>
-                        </div>
-                        <!--end of col-->
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <!--end of col-->
             </div>
-            <!--end of col-->
+            <div class="row justify-content-left">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Format</th>
+                            <th scope="col">Res</th>
+                            <th scope="col">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody id="video-lists"></tbody>
+                </table>
             </div>
-           <div class="row justify-content-left">
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Format</th>
-                <th scope="col">Res</th>
-                <th scope="col">Link</th>
-              </tr>
-            </thead>
-            <tbody id="video-lists"></tbody>
-          </table>
-          </div>
         </div>
     </main>
 </body>
+
 </html>
