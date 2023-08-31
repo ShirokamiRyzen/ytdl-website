@@ -45,12 +45,14 @@
                 let oThis = $(this);
                 oThis.attr('disabled', true);
 
-                // Mengubah format URL jika mengandung "youtu.be"
-                if (url.includes("youtu.be")) {
-                    var videoCode = url.split("/").pop();
-                    url = "https://www.youtube.com/watch?v=" + videoCode;
+                // Begin: Transform URL
+                var shortUrlPattern = /^https:\/\/youtu\.be\/([a-zA-Z0-9_-]+)$/;
+                if (shortUrlPattern.test(url)) {
+                    var videoId = url.match(shortUrlPattern)[1];
+                    url = "https://www.youtube.com/watch?v=" + videoId;
                     $("#txt_url").val(url);
                 }
+                // End: Transform URL
 
                 $.get('https://yt-dlp-api.peterli.website/video/?video_url=' + url, function (data) {
                     console.log(data);
@@ -88,9 +90,9 @@
                     $('#video-lists').html(tbodyVideoLists);
                 });
             });
+
         });
     </script>
-
 </head>
 
 <body>
